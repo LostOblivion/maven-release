@@ -5,7 +5,7 @@
 
     <groupId>no.kantega.olasol.mavenrelease</groupId>
     <artifactId>maven-release</artifactId>
-    <version>20171107213902</version>
+    <version>20171107214344</version>
 
     <dependencies>
         <dependency>
