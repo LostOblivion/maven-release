@@ -46,7 +46,7 @@ function main() {
 
     maven_set_version $(get_date_version)
 
-    mvn clean deploy -B -P release-profile
+    mvn clean install -B -P release-profile
 
     git commit -a -m "(maven-release) Preparing to release $(maven_evaluate project.groupId):$(maven_evaluate project.artifactId):$(maven_evaluate project.version)"
 }
