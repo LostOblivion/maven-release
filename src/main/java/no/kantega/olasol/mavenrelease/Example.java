@@ -1,8 +1,11 @@
 package no.kantega.olasol.mavenrelease;
 
-class Example {
+public class Example {
 
-    void printHelloWorld() {
+    /**
+     * Prints the message ‘Hello, World!’ to the standard output.
+     */
+    public void printHelloWorld() {
         System.out.println("Hello, World!");
     }
 }
