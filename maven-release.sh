@@ -51,9 +51,9 @@ function main() {
     maven_set_version $(get_date_version)
 
     echo "Building the project with the following command:"
-    echo mvn $@
+    echo $@
 
-    mvn $@
+    $@
 
     echo "Committing, tagging, and pushing ..."
     git commit -a -m "$message Preparing to release $(maven_evaluate project.groupId):$(maven_evaluate project.artifactId):$(maven_evaluate project.version)"
