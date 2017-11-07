@@ -47,15 +47,15 @@ function main() {
         return -1
     fi
 
-    echo "Setting the project version ..."
+    echo "$message Setting the project version ..."
     maven_set_version $(get_date_version)
 
-    echo "Building the project with the following command:"
+    echo "$message Building the project with the following command:"
     echo $@
 
     $@
 
-    echo "Committing, tagging, and pushing ..."
+    echo "$message Committing, tagging, and pushing ..."
     git commit -a -m "$message Preparing to release $(maven_evaluate project.groupId):$(maven_evaluate project.artifactId):$(maven_evaluate project.version)"
     git tag $(maven_evaluate project.version)
     git push
