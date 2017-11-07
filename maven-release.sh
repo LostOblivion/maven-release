@@ -10,7 +10,8 @@ function maven_evaluate() {
 
 function maven_set_version() {
     mvn org.codehaus.mojo:versions-maven-plugin:2.5:set \
-        -D newVersion=$1
+        -D newVersion=$1 \
+        -D generateBackupPoms=false
 }
 
 function get_date_version() {
@@ -23,7 +24,7 @@ function parse_git_branch() {
 
 function main() {
 
-    if [[ ! $(parse_git_branch) =~ release ]]; then
+    if [[ ! $(parse_git_branch) =~ ^release$ ]]; then
         echo "Not on release branch, aborting!" >&2
         return -1
     fi
@@ -34,7 +35,12 @@ function main() {
     fi
 
     maven_set_version $(get_date_version)
+
+    git commit -a -m "(maven-release) Preparing for release $(maven_evaluate project.groupId):$(maven_evaluate project.artifactId):$(maven_evaluate project.version)"
+
+    mvn clean deploy -B -P release-profile
 }
 
+set -e
 main
 exit $?
