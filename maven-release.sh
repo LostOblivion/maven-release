@@ -33,6 +33,7 @@ function main() {
 
     if [[ ! $(git_branch) =~ "$branch" ]]; then
         echo "Not on release branch, aborting!" >&2
+        echo "(Use --force to override and release anyway.)"
         return -1
     fi
 
@@ -53,13 +54,14 @@ function main() {
     echo "$message Building the project with the following command:"
     echo $@
 
+    echo "$message Building the project ..."
     $@
 
     echo "$message Committing, tagging, and pushing ..."
     git commit -a -m "$message Preparing to release $(maven_evaluate project.groupId):$(maven_evaluate project.artifactId):$(maven_evaluate project.version)"
     git tag $(maven_evaluate project.version)
-    git push
-    git push --tags
+    git push origin $(git_branch)
+    git push origin $(maven_evaluate project.version)
 }
 
 set -e
