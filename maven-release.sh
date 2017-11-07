@@ -18,13 +18,17 @@ function get_date_version() {
     date '+%Y%m%d%H%M%S'
 }
 
-function parse_git_branch() {
-     git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+function git_last_message() {
+    git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+}
+
+function git_branch() {
+    git log -1 --pretty=%B
 }
 
 function main() {
 
-    if [[ ! $(parse_git_branch) =~ ^release$ ]]; then
+    if [[ ! $(git_last_message) =~ ^release$ ]]; then
         echo "Not on release branch, aborting!" >&2
         return -1
     fi
@@ -34,11 +38,17 @@ function main() {
         return -1
     fi
 
+    if [[ $(git_last_message) =~ \(maven-release\) ]]; then
+        echo "No changes since previous release, aborting!"
+        echo "(Use --force to override and release anyway.)"
+        return 0
+    fi
+
     maven_set_version $(get_date_version)
 
-    git commit -a -m "(maven-release) Preparing for release $(maven_evaluate project.groupId):$(maven_evaluate project.artifactId):$(maven_evaluate project.version)"
-
     mvn clean deploy -B -P release-profile
+
+    git commit -a -m "(maven-release) Preparing to release $(maven_evaluate project.groupId):$(maven_evaluate project.artifactId):$(maven_evaluate project.version)"
 }
 
 set -e
