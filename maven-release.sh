@@ -42,10 +42,10 @@ function main() {
         return 0
     fi
 
-    if [[ ! $(maven_evaluate project.version) =~ -SNAPSHOT$ ]]; then
-        echo "Not on SNAPSHOT version, aborting!" >&2
-        return -1
-    fi
+    # if [[ ! $(maven_evaluate project.version) =~ -SNAPSHOT$ ]]; then
+    #     echo "Not on SNAPSHOT version, aborting!" >&2
+    #     return -1
+    # fi
 
     echo "$message Setting the project version ..."
     maven_set_version $(get_date_version)
